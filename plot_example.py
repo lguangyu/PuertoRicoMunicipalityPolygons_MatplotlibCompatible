@@ -37,7 +37,8 @@ axes.tick_params(
 # draw each municipality
 for k, v in municipality.items():
 	# plot municipality polygon(s)
-	for xys in v: # each municipality may have more than one polygon
+	poly = v["polygon"]
+	for xys in poly: # each municipality may have more than one polygon
 		p = matplotlib.patches.Polygon(xys, linestyle = "-", linewidth = 1.0,
 			edgecolor = "#a0a0a0", facecolor = "#d0d0d0")
 		axes.add_patch(p)
@@ -45,8 +46,8 @@ for k, v in municipality.items():
 	# add a label to each municipality
 	# we use v[0] as the "main polygon" for each municipality since they have
 	# been sorted by area in descending order in puerto_rico_municipality.json
-	xy = (numpy.min(v[0], axis = 0) + numpy.max(v[0], axis = 0)) / 2
-	axes.text(*xy, k, fontsize = 6,
+	xy = (numpy.min(poly[0], axis = 0) + numpy.max(poly[0], axis = 0)) / 2
+	axes.text(*xy, v["displayname"], fontsize = 6,
 		horizontalalignment = "center", verticalalignment = "center")
 
 # set the axes extend so we can see the map
@@ -54,6 +55,6 @@ axes.set_xlim(extend["x"], extend["x"] + extend["width"])
 axes.set_ylim(extend["y"], extend["y"] + extend["height"])
 
 # save figure
-figure.savefig("example.png", dpi = 300)
+figure.savefig("example.1.png", dpi = 300)
 matplotlib.pyplot.close()
 

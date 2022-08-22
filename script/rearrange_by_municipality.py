@@ -17,8 +17,11 @@ def get_args(argv = None):
 		help = "output json file (default: stdout)")
 	ap.add_argument("-T", "--polygon-id-translation-table", type = str,
 		metavar = "tsv",
-		help = "2-column tsv to map polygon id in <input> into readable names "
-			"if provided")
+		help = "3-column tsv to map polygon id in <input> into human-"
+			"recognizable names if provided; the 2nd column is intended for "
+			"programming uses which is recommended to use ascii only without "
+			"special characters; the 3rd column is intended for display at the "
+			"front-end")
 
 	# parse and refine args
 	args = ap.parse_args(argv)
@@ -54,7 +57,7 @@ def read_translation_table(f) -> dict:
 				k, *v = line.rstrip("\r\n").split("\t")
 				if (not v) or (not v[0]):
 					continue
-				ret[k] = v[0]
+				ret[k] = v
 	return ret
 
 
@@ -68,16 +71,26 @@ def polygon_area(xys):
 
 def save_municipality_rearranged_json(f, polygons, trans_table):
 	o = dict(metadata = dict(extend = polygons["extend"]))
-	o["municipality"] = collections.defaultdict(list)
+	o["municipality"] = dict()
 	for k, v in polygons["polygons"].items():
-		municip = trans_table[k]
-		o["municipality"][municip].append(v)
+		if k not in trans_table:
+			municip_ascii, municip_full = k, k
+		elif len(trans_table[k]) == 1:
+			municip_ascii = trans_table[k][0]
+			municip_full = municip_ascii
+		else:
+			municip_ascii, municip_full = trans_table[k][:2]
+
+		if municip_ascii not in o["municipality"]:
+			o["municipality"][municip_ascii] = dict(displayname = municip_full,
+				polygon = list())
+		o["municipality"][municip_ascii]["polygon"].append(v)
 	# sort each municipality polygo by descending area
 	for v in o["municipality"].values():
-		v.sort(key = polygon_area, reverse = True)
+		v["polygon"].sort(key = polygon_area, reverse = True)
 	# save json
 	with open(f, "w") as fp:
-		json.dump(o, fp, sort_keys = sorted)
+		json.dump(o, fp, sort_keys = True)
 	return 
 
 

@@ -31,8 +31,11 @@ def get_args(argv = None):
 		help = "dpi of output image (default: 300)")
 	ap.add_argument("-T", "--polygon-id-translation-table", type = str,
 		metavar = "tsv",
-		help = "2-column tsv to map polygon id in <input> into readable names "
-			"if provided")
+		help = "3-column tsv to map polygon id in <input> into human-"
+			"recognizable names if provided; the 2nd column is intended for "
+			"programming uses which is recommended to use ascii only without "
+			"special characters; the 3rd column is intended for display at the "
+			"front-end")
 
 	# parse and refine args
 	args = ap.parse_args(argv)
@@ -68,7 +71,7 @@ def read_translation_table(f) -> dict:
 				k, *v = line.rstrip("\r\n").split("\t")
 				if (not v) or (not v[0]):
 					continue
-				ret[k] = v[0]
+				ret[k] = v[-1] # use the last one
 	return ret
 
 
