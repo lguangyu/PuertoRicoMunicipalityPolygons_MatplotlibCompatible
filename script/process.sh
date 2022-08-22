@@ -17,11 +17,11 @@ mkdir -p .process
 # the result should be a 2-column, tab-delimited table, with the 1-st column
 # listing all polygon ids and the second for the corresponding municipalities
 # for example:
-#polygon3133_1_	Adjuntas
-#polygon3135_1_	Aguada
-#polygon3137_1_	Aguadilla
-#polygon3139_1_	Aguas Buenas
-#polygon3141_1_	Aibonito
+#polygon3133_1_	adjuntas	Adjuntas
+#polygon3135_1_	aguada	Aguada
+#polygon3137_1_	aguadilla	Aguadilla
+#polygon3139_1_	aguas_buenas	Aguas Buenas
+#polygon3141_1_	aibonito	Aibonito
 #...
 
 # finally rearrange the polygons by municipality
@@ -30,7 +30,7 @@ mkdir -p .process
 ./script/rearrange_by_municipality.py \
 	-o puerto_rico_municipality.json \
 	-T .process/polygon_municip_translation_table.tsv \
-	.process/parsed.json
+	.process/polygon.json
 
 # visualize it
 ./plot_example.py

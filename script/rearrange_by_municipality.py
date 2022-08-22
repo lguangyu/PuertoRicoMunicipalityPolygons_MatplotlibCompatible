@@ -70,7 +70,7 @@ def polygon_area(xys):
 
 
 def save_municipality_rearranged_json(f, polygons, trans_table):
-	o = dict(metadata = dict(extend = polygons["extend"]))
+	o = dict(metadata = dict(extent = polygons["extent"]))
 	o["municipality"] = dict()
 	for k, v in polygons["polygons"].items():
 		if k not in trans_table:

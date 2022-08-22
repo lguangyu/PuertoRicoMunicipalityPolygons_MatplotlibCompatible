@@ -12,15 +12,15 @@ import sys
 # read data from the json
 with open("./puerto_rico_municipality.json", "r") as fp:
 	data = json.load(fp)
-extend = data["metadata"]["extend"]
+extent = data["metadata"]["extent"]
 municipality = data["municipality"]
 
 
 # draw a figure with exact aspect ratio we want
 figure = matplotlib.figure.Figure()
 fig_width_inch = 8
-fig_height_inch = fig_width_inch / extend["width"]\
-	* extend["height"]
+fig_height_inch = fig_width_inch / extent["width"]\
+	* extent["height"]
 figure.set_size_inches(fig_width_inch, fig_height_inch)
 
 # add an axes that fills the entire figure canvas without showing axes
@@ -50,11 +50,11 @@ for k, v in municipality.items():
 	axes.text(*xy, v["displayname"], fontsize = 6,
 		horizontalalignment = "center", verticalalignment = "center")
 
-# set the axes extend so we can see the map
-axes.set_xlim(extend["x"], extend["x"] + extend["width"])
-axes.set_ylim(extend["y"], extend["y"] + extend["height"])
+# set the axes extent so we can see the map
+axes.set_xlim(extent["x"], extent["x"] + extent["width"])
+axes.set_ylim(extent["y"], extent["y"] + extent["height"])
 
 # save figure
-figure.savefig("example.1.png", dpi = 300)
+figure.savefig("example.png", dpi = 300)
 matplotlib.pyplot.close()
 

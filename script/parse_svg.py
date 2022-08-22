@@ -63,7 +63,7 @@ class SimpleSVG(object):
 			raise ValueError("no svg node found in provided xml")
 		return node, namespace
 
-	def get_svg_extend(self) -> dict:
+	def get_svg_extent(self) -> dict:
 		svg, namespace = self.get_svg_node()
 		viewbox = [float(i) for i in svg.attrib["viewBox"].split(" ")]
 		ret = dict(
@@ -87,16 +87,16 @@ class SimpleSVG(object):
 				ret[node.attrib["id"]] = p.vertices.tolist()
 		return ret
 
-	def save_extend_and_polygon_json(self, f, flip_vertical = True, **kw):
+	def save_extent_and_polygon_json(self, f, flip_vertical = True, **kw):
 		data = dict(
-			extend = self.get_svg_extend(),
+			extent = self.get_svg_extent(),
 			polygons = self.get_svg_polygons(include_path = True),
 		)
 		if flip_vertical:
-			h = data["extend"]["height"]
-			# flip extend
-			y = data["extend"]["y"]
-			data["extend"]["y"] = 0
+			h = data["extent"]["height"]
+			# flip extent
+			y = data["extent"]["y"]
+			data["extent"]["y"] = 0
 			for k, p in data["polygons"].items():
 				for xy in p:
 					xy[1] = h + y - xy[1]
@@ -109,7 +109,7 @@ class SimpleSVG(object):
 def main():
 	args = get_args()
 	svg = SimpleSVG.from_file(args.input)
-	svg.save_extend_and_polygon_json(args.output,
+	svg.save_extent_and_polygon_json(args.output,
 		flip_vertical = not args.no_flip_vertical)
 	return
 

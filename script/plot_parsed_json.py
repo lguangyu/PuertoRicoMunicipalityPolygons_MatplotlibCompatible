@@ -75,9 +75,9 @@ def read_translation_table(f) -> dict:
 	return ret
 
 
-def setup_layout(extend) -> dict:
-	fig_width	= extend["width"]
-	fig_height	= extend["height"]
+def setup_layout(extent) -> dict:
+	fig_width	= extent["width"]
+	fig_height	= extent["height"]
 	fig_diag	= math.sqrt(fig_width ** 2 + fig_height ** 2)
 
 	fig_diag_inch	= 12
@@ -110,11 +110,11 @@ def setup_layout(extend) -> dict:
 
 
 def plot(png, data, dpi = 300, trans_table = None):
-	extend = data["extend"]
+	extent = data["extent"]
 	if trans_table is None:
 		trans_table = dict()
 
-	layout = setup_layout(extend)
+	layout = setup_layout(extent)
 	figure = layout["figure"]
 
 	# plot polygons
@@ -130,8 +130,8 @@ def plot(png, data, dpi = 300, trans_table = None):
 			horizontalalignment = "center", verticalalignment = "center")
 
 	# misc
-	axes.set_xlim(extend["x"], extend["x"] + extend["width"])
-	axes.set_ylim(extend["y"], extend["y"] + extend["height"])
+	axes.set_xlim(extent["x"], extent["x"] + extent["width"])
+	axes.set_ylim(extent["y"], extent["y"] + extent["height"])
 
 	# save fig and clean up
 	figure.savefig(png, dpi = dpi)
